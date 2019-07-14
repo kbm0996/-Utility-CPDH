@@ -6,24 +6,34 @@
 
 - »ç¿ë¹ý
 
-CPDH* pPdh = new CPDH();
+	CPDH* pPdh = new CPDH();
 
-	int nIdx_CpuUsage = pPdh->AddCounter(df_PDH_CPUUSAGE_TOTAL);
-	int nIdx_MemAvail = pPdh->AddCounter(df_PDH_MEMAVAIL_MB);
-	int nIdx_NpMem = pPdh->AddCounter(df_PDH_NONPAGEDMEM_BYTES);
-	int nIdx_EthernetRecv = pPdh->AddCounter(L"\\Network Interface(Intel[R] Dual Band Wireless-AC 3168)\\Bytes Received/sec");
-	int nIdx_EthernetSend = pPdh->AddCounter(L"\\Network Interface(Intel[R] Dual Band Wireless-AC 3168)\\Bytes Sent/sec");
-	//int nIdx_EthernetRecv = pPdh->AddCounter(df_PDH_ETHERNETRECV_BYTES);
-	//int nIdx_EthernetSend = pPdh->AddCounter(df_PDH_ETHERNETSEND_BYTES);
+	/// Add Counter ///
+	int nIdx_CpuUsage = -1;
+	int nIdx_MemAvail = -1;
+	int nIdx_NpMem = -1;
+	int nIdx_EthernetRecv = -1;
+	int nIdx_EthernetSend = -1;
+	if (pPdh->AddCounter(df_PDH_CPUUSAGE_TOTAL, nIdx_CpuUsage) != ERROR_SUCCESS)
+		return;
+	if (pPdh->AddCounter(df_PDH_MEMAVAIL_MB, nIdx_MemAvail) != ERROR_SUCCESS)
+		return;
+	if (pPdh->AddCounter(df_PDH_NONPAGEDMEM_BYTES, nIdx_NpMem) != ERROR_SUCCESS)
+		return;
+	if (pPdh->AddCounter(df_PDH_ETHERNETRECV_BYTES, nIdx_EthernetRecv) != ERROR_SUCCESS)
+		return;
+	if (pPdh->AddCounter(df_PDH_ETHERNETSEND_BYTES, nIdx_EthernetSend) != ERROR_SUCCESS)
+		return;
+	
 
+	/// Performance Monitoring ///
 	double dCpu, dMem, dNpmem, dERecv, dESend;
 	double dMin, dMax, dMean;
 	while (1)
 	{
 		/// Collect Data ///
-		if (!pPdh->CollectQueryData())
+		if (pPdh->CollectQueryData())
 			continue;
-
 
 		/// Update Counters ///
 		if (!pPdh->GetCounterValue(nIdx_CpuUsage, &dCpu)) dCpu = 0;
@@ -32,7 +42,6 @@ CPDH* pPdh = new CPDH();
 		if (!pPdh->GetCounterValue(nIdx_EthernetRecv, &dERecv)) dERecv = 0;
 		if (!pPdh->GetCounterValue(nIdx_EthernetSend, &dESend)) dESend = 0;
 
-	
 		/// Get Statistics ///
 		wprintf(L" - HW CPU Usage 	: %.1f %%", dCpu);
 		if (pPdh->GetStatistics(&dMin, &dMax, &dMean, nIdx_CpuUsage))
@@ -57,6 +66,12 @@ CPDH* pPdh = new CPDH();
 		Sleep(1000);
 		system("cls");
 	}
+
+	pPdh->RemoveCounter(nIdx_CpuUsage);
+	pPdh->RemoveCounter(nIdx_MemAvail);
+	pPdh->RemoveCounter(nIdx_NpMem);
+	pPdh->RemoveCounter(nIdx_EthernetRecv);
+	pPdh->RemoveCounter(nIdx_EthernetSend);
 
 	delete pPdh;
 
