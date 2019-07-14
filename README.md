@@ -5,9 +5,9 @@
  서버처럼 장시간 가동해야만 하는 프로그램의 경우 예측하기 어려운 원인으로 인해 중단되는 등 치명적인 문제가 발생할 수 있다. PDH 라이브러리를 통해 주기적으로 성능 정보를 기록해뒀다면 이러한 문제가 발생했을 때 원인을 추적할 수 있는 근거 자료가 될 수 있다.
 
 ## 💻 Perfmon
-  해당 프로그램은 락프리 메모리풀과 TLS를 활용한 락프리 메모리풀의 성능 차이를 비교할 수 있다.
+  서버에서 계속 주시해야 할 주요 항목들을 모니터링하는 예제
 
-  ![capture](https://github.com/kbm0996/MyProfiler/blob/master/figure/run.png)
+  ![capture](https://github.com/kbm0996/-Utility-CPDH/blob/master/PDH/jpg/test.JPG)
   
   **figure 1. Program*
  
